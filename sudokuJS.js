@@ -1431,7 +1431,7 @@
 
 		/* keyboardNumberInput - update our board model
 		 * -----------------------------------------------------------------*/
-		var keyboardNumberInput = function(input, id){
+		var keyboardNumberInput = function(input, id, _opts){
 			var val = parseInt(input.val());
 			if(editingCandidates){
 				toggleCandidateOnCell(val, id);
@@ -1509,8 +1509,12 @@
 			if($("#input-"+id).hasClass("board-cell--error"))
 				$boardInputs.removeClass("board-cell--error");
 
-			if(typeof opts.boardUpdatedFn === "function")
-				opts.boardUpdatedFn({cause: "user input", cellsUpdated: [id]});
+			if(typeof opts.boardUpdatedFn === "function"){
+				var cause = "user input";
+				if(typeof _opts !== "undefined" && typeof _opts.cause === "string")
+					cause = _opts.cause;
+				opts.boardUpdatedFn({cause: cause, cellsUpdated: [id]});
+			}
 
 			onlyUpdatedCandidates = false;
 		};
@@ -1785,6 +1789,14 @@
 			updateUIBoard(false);
 		};
 
+		var fillBoardCell = function(cellIndex, value){
+			//setBoardCell(cellIndex, value);
+			//updateUIBoardCell(cellIndex);
+			var $this = $("#input-" + cellIndex);
+			$this.val(value);
+			keyboardNumberInput($this, cellIndex, {cause: 'robot input'});
+		};
+
 		var hideCandidates = function(){
 			$board.removeClass("showCandidates");
 			candidatesShowing = false;
@@ -1805,6 +1817,7 @@
 			clearBoard : clearBoard,
 			getBoard : getBoard,
 			setBoard : setBoard,
+			fillBoardCell: fillBoardCell,
 			hideCandidates : hideCandidates,
 			showCandidates : showCandidates,
 			setEditingCandidates: setEditingCandidates,
