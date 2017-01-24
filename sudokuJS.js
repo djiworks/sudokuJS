@@ -1341,7 +1341,14 @@
 				// if user clicked solve step, and we're only going to fill in a new value (not messing with candidates) - then show user straight away
 				//callback
 				if(typeof opts.boardUpdatedFn === "function") {
-					opts.boardUpdatedFn({cause: strategies[i].title, cellsUpdated: effectedCells});
+					var cellsUpdated = [];
+					effectedCells.every(function(cellIndex){
+						cellsUpdated.push({index: cellIndex, val: board[cellIndex].val});
+					});
+					opts.boardUpdatedFn({
+						cause: strategies[i].title,
+						cellsUpdated: cellsUpdated
+					});
 				}
 
 				//check if this finished the board
@@ -1513,7 +1520,10 @@
 				var cause = "user input";
 				if(typeof _opts !== "undefined" && typeof _opts.cause === "string")
 					cause = _opts.cause;
-				opts.boardUpdatedFn({cause: cause, cellsUpdated: [id]});
+				opts.boardUpdatedFn({
+					cause: cause,
+					cellsUpdated: [{index:id, val: val}],
+				});
 			}
 
 			onlyUpdatedCandidates = false;

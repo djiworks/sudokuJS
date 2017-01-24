@@ -130,7 +130,7 @@ Fires whenever the board is updated, whether by user or solver.
 		board: board
 		,boardUpdatedFn: function(data){
 			//data.cause: "user input" | name of strategy used
-			//data.cellsUpdated: [] of indexes for cells updated
+			//data.cellsUpdated: [] of cells updated using {index:cellIndex, val:cellValue}
 			alert("board was updated!");
 		}
 	});
